@@ -1,19 +1,30 @@
+import { Request, Response } from 'express';
 import { Client } from 'pg';
 
-class DBcontroller  {
-    
-    async create(request: Request, response: Response) {
-        const client = new Client({
-            host: '142.93.124.123',
-            port: 5432,
-            database: 'postgres',
-            password: 'docker',
-            user: 'postgres'
-        });
+class DBController {
 
-        await client.connect();
-    }   
+
+  async create(request: Request, response: Response) {
+    const dataInicial = new Date().getTime();
+    const client = new Client({
+      host:'IP.DO.BANCO',
+      port: 5432,
+      database: 'postgres',
+      password: 'SENHA',
+      user: 'postgres'
+    });
+
+    await client.connect();
+
+    const { rows } = await client.query('SELECT * FROM PHOTOS');
+
+    const dataFinal = new Date().getTime();
+
+    console.log('O resultado foi', (dataFinal - dataInicial))
+
+    return response.json(rows);
+  }
 
 }
 
-export default DBcontroller;
+export default new DBController;
